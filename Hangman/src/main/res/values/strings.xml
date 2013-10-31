@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Hangman</string>
+    <string name="action_settings">Settings</string>
+    <string name="btnCheck">Check</string>
+    <string name="ErrNoInput">Please make a guess</string>
+
+</resources>
