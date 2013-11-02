@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends Activity {
@@ -18,9 +17,7 @@ public class MainActivity extends Activity {
     EditText guessInput = null;
     TextView wordText = null;
     TextView usedCharsText = null;
-    char[] wordToGuess = null;
-    char[] guessArray = null;
-    List<Character> usedChars = null;
+    GameEngine game = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,36 +27,18 @@ public class MainActivity extends Activity {
     }
 
     private void initializeElements(){
-        /* Initialize variables */
-        wordToGuess = getWord().toCharArray();
-        guessArray = convertWordToUnderscores(wordToGuess);
-        usedChars = new ArrayList<Character>();
+        /* Game Engine */
+        game = new GameEngine();
 
         /* Initialize widgets */
         checkBtn = (Button) findViewById(R.id.btnCheck);
         guessInput = (EditText) findViewById(R.id.guessInput);
         usedCharsText = (TextView) findViewById(R.id.usedCharsView);
         wordText = (TextView) findViewById(R.id.wordText);
-        wordText.setText(charArrayToString(guessArray));
+        wordText.setText(Helper.charArrayToString(game.guessArray));
 
         /* Needs to be done after initializing all widgets, to avoid null pointer refs */
         addOnClickListeners();
-    }
-
-    private String charArrayToString(char[] array){
-        return new String(array);
-    }
-
-    private char[] convertWordToUnderscores(char[] wordToConvert){
-        char[] result = new char[wordToConvert.length];
-        for (int i = 0; i < wordToConvert.length; i++){
-            if (wordToConvert[i] != ' '){
-                result[i] = '_';
-            } else {
-                result[i] = ' ';
-            }
-        }
-        return result;
     }
 
     private void addOnClickListeners(){
@@ -77,37 +56,30 @@ public class MainActivity extends Activity {
         /* Check whether guess is empty, if empty short circuit with message */
         if (guess.equalsIgnoreCase("") || guess.equals(" ")){
             Toast.makeText(this, R.string.ErrNoInput, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (guess.length() == 1){
-            char ch = guess.toCharArray()[0];
-            List<Integer> results = findIndexOfChar(ch);
+        } else if (game.isGameOver()){
+            Toast.makeText(this, R.string.GameOver, Toast.LENGTH_LONG).show();
+        } else if (guess.length() == 1){
+            char ch = Character.toLowerCase(guess.toCharArray()[0]);
+            List<Integer> results = game.findIndexOfChar(ch);
             if (results.size() == 0){
-                usedChars.add(ch);
-                //updateTextView(usedCharsText, (char) usedChars.toArray());
+                String usedCharsToDisplay = game.getUsedCharsToDisplay(ch);
+                updateTextView(usedCharsText, usedCharsToDisplay);
+            } else {
+                for (Integer i : results){
+                    game.guessArray[i] = game.wordToGuess[i];
+                }
+                wordText.setText(Helper.charArrayToString(game.guessArray));
             }
-            for (Integer i : results){
-                guessArray[i] = ch;
-            }
-        }
-    }
-
-    private void updateTextView(TextView textView, char[] array){
-
-    }
-
-    private List<Integer> findIndexOfChar(char ch){
-        List<Integer> result = new ArrayList<Integer>();
-        for (int i = 0; i < wordToGuess.length; i++){
-            if (wordToGuess[i] == ch){
-                result.add(i);
+            guessInput.setText("");
+            if (game.isGameWon()){
+                Toast.makeText(this, R.string.Win, Toast.LENGTH_LONG).show();
             }
         }
-        return result;
     }
 
-    private String getWord(){
-        return "Hangman";
+    private void updateTextView(TextView textView, String string){
+        textView.setText(string);
+
     }
 
     @Override
