@@ -8,5 +8,6 @@
     <string name="GameOver">Game Over</string>
     <string name="Win">Congratulations you have won</string>
     <string name="ImageDescription">Hangman</string>
+    <string name="ResetBtn">New word</string>
 
 </resources>

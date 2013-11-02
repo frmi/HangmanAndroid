@@ -6,6 +6,13 @@
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ResetBtn"
+        android:id="@+id/resetBtn"
+        android:layout_gravity="center" />
+
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -35,13 +42,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/textView4"
-                android:layout_row="1"
-                android:layout_column="0"
-                android:layout_rowSpan="2"
+                android:id="@+id/wordToGuess"
                 android:gravity="center_vertical|center_horizontal"
-                android:autoText="false"
-                android:text="Word to guess" />
+                android:autoText="false" />
 
             <Space
                 android:layout_width="20dp"
@@ -72,27 +75,35 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="Q"
+                    android:text="q"
                     android:id="@+id/qBtn"
-                    android:layout_row="5"
-                    android:layout_column="0"
                     android:layout_weight="1" />
+
+                <Space
+                    android:layout_width="6dp"
+                    android:layout_height="fill_parent" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="W"
+                    android:text="w"
                     android:id="@+id/wBtn"
                     android:layout_row="5"
                     android:layout_column="9"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:layout_marginLeft="-6dp"
+                    android:layout_marginRight="-6dp" />
+
+                <Space
+                    android:layout_width="6dp"
+                    android:layout_height="fill_parent" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="E"
+                    android:text="e"
                     android:id="@+id/eBtn"
                     android:layout_row="5"
                     android:layout_column="8"
@@ -102,7 +113,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="R"
+                    android:text="r"
                     android:id="@+id/rBtn"
                     android:layout_row="5"
                     android:layout_column="7"
@@ -112,7 +123,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="T"
+                    android:text="t"
                     android:id="@+id/tBtn"
                     android:layout_row="5"
                     android:layout_column="6"
@@ -122,7 +133,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="Y"
+                    android:text="y"
                     android:id="@+id/yBtn"
                     android:layout_row="5"
                     android:layout_column="5"
@@ -132,7 +143,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="U"
+                    android:text="u"
                     android:id="@+id/uBtn"
                     android:layout_row="5"
                     android:layout_column="3"
@@ -142,7 +153,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="I"
+                    android:text="i"
                     android:id="@+id/iBtn"
                     android:layout_row="5"
                     android:layout_column="4"
@@ -152,7 +163,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="O"
+                    android:text="o"
                     android:id="@+id/oBtn"
                     android:layout_row="5"
                     android:layout_column="2"
@@ -162,7 +173,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="P"
+                    android:text="p"
                     android:id="@+id/pBtn"
                     android:layout_row="5"
                     android:layout_column="1"
@@ -172,7 +183,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="Å"
+                    android:text="å"
                     android:id="@+id/aaBtn"
                     android:layout_row="5"
                     android:layout_column="1"
@@ -188,7 +199,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="A"
+                    android:text="a"
                     android:id="@+id/aBtn"
                     android:layout_row="5"
                     android:layout_column="0"
@@ -198,7 +209,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="S"
+                    android:text="s"
                     android:id="@+id/sBtn"
                     android:layout_row="5"
                     android:layout_column="9"
@@ -208,7 +219,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="D"
+                    android:text="d"
                     android:id="@+id/dBtn"
                     android:layout_row="5"
                     android:layout_column="8"
@@ -218,7 +229,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="F"
+                    android:text="f"
                     android:id="@+id/fBtn"
                     android:layout_row="5"
                     android:layout_column="7"
@@ -228,7 +239,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="G"
+                    android:text="g"
                     android:id="@+id/gBtn"
                     android:layout_row="5"
                     android:layout_column="6"
@@ -238,7 +249,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="fill_parent"
-                    android:text="H"
+                    android:text="h"
                     android:id="@+id/hBtn"
                     android:layout_row="5"
                     android:layout_column="5"
@@ -248,7 +259,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="J"
+                    android:text="j"
                     android:id="@+id/jBtn"
                     android:layout_row="5"
                     android:layout_column="3"
@@ -259,7 +270,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="K"
+                    android:text="k"
                     android:id="@+id/kBtn"
                     android:layout_row="5"
                     android:layout_column="4"
@@ -269,27 +280,39 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="L"
+                    android:text="l"
                     android:id="@+id/lBtn"
                     android:layout_row="5"
                     android:layout_column="2"
                     android:layout_weight="1" />
 
-                <Button
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="25dp"
-                    android:layout_height="wrap_content"
-                    android:text="Æ"
-                    android:id="@+id/aeBtn"
-                    android:layout_row="5"
-                    android:layout_column="1"
-                    android:layout_weight="1" />
+                <Space
+                    android:layout_width="6dp"
+                    android:layout_height="fill_parent" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="Ø"
+                    android:text="æ"
+                    android:id="@+id/aeBtn"
+                    android:layout_row="5"
+                    android:layout_column="1"
+                    android:layout_weight="1"
+                    android:layout_marginRight="-6dp"
+                    android:layout_marginLeft="-6dp"
+                    android:paddingLeft="6dp"
+                    android:paddingRight="6dp" />
+
+                <Space
+                    android:layout_width="6dp"
+                    android:layout_height="fill_parent" />
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="25dp"
+                    android:layout_height="wrap_content"
+                    android:text="ø"
                     android:id="@+id/oeBtn"
                     android:layout_row="5"
                     android:layout_column="1"
@@ -318,7 +341,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="Z"
+                    android:text="z"
                     android:id="@+id/zBtn"
                     android:layout_row="5"
                     android:layout_column="6"
@@ -328,7 +351,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="X"
+                    android:text="x"
                     android:id="@+id/xBtn"
                     android:layout_row="5"
                     android:layout_column="5"
@@ -338,7 +361,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="C"
+                    android:text="c"
                     android:id="@+id/cBtn"
                     android:layout_row="5"
                     android:layout_column="3"
@@ -348,7 +371,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="V"
+                    android:text="v"
                     android:id="@+id/vBtn"
                     android:layout_row="5"
                     android:layout_column="4"
@@ -358,7 +381,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="B"
+                    android:text="b"
                     android:id="@+id/bBtn"
                     android:layout_row="5"
                     android:layout_column="2"
@@ -368,21 +391,31 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="N"
+                    android:text="n"
                     android:id="@+id/nBtn"
                     android:layout_row="5"
                     android:layout_column="1"
                     android:layout_weight="1" />
 
+                <Space
+                    android:layout_width="6dp"
+                    android:layout_height="fill_parent" />
+
                 <Button
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:text="M"
+                    android:text="m"
                     android:id="@+id/mBtn"
                     android:layout_row="5"
                     android:layout_column="1"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:layout_marginLeft="-6dp"
+                    android:layout_marginRight="-6dp" />
+
+                <Space
+                    android:layout_width="6dp"
+                    android:layout_height="fill_parent" />
 
                 <Space
                     android:layout_width="25dp"
