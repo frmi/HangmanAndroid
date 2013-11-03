@@ -1,0 +1,6 @@
+*gradle*
+*.imp
+.idea/*
+gradle/
+local.properties
+settings.gradle
