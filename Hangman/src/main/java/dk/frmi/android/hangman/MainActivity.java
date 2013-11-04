@@ -376,6 +376,9 @@ public class MainActivity extends Activity {
             Toast.makeText(this, R.string.GameOver, Toast.LENGTH_LONG).show();
         } else if (game.isGameWon()){
             Toast.makeText(this, R.string.Win, Toast.LENGTH_LONG).show();
+            for(Button btn : keyboardButtons){
+                btn.setEnabled(false);
+            }
         }
     }
 

@@ -70,7 +70,7 @@ public class GameEngine {
         return dictionary;
     }
 
-    public List<Integer> findIndexOfChar(char ch){
+    public List<Integer> findIndexOfChar(Character ch){
         List<Integer> result = new ArrayList<Integer>();
         for (int i = 0; i < wordToGuess.length; i++){
             if (Character.toLowerCase(wordToGuess[i]) == ch){
