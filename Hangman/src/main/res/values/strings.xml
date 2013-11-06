@@ -9,5 +9,8 @@
     <string name="Win">Congratulations you have won</string>
     <string name="ImageDescription">Hangman</string>
     <string name="ResetBtn">New word</string>
+    <string name="CategoryNotFound">Category not found</string>
+    <string name="categoryLbl">Category:</string>
+    <string name="StringSpace">  </string>
 
 </resources>

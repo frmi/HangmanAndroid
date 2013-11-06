@@ -1,8 +1,6 @@
 package dk.frmi.android.hangman;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.widget.ImageView;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -11,47 +9,91 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by Frederik on 01-11-13.
  */
 public class GameEngine {
-    private final int MAX_ATTEMPS = 5;
 
-    private ArrayList<String> dictionary;
-    public char[] wordToGuess = null;
-    public char[] guessArray = null;
-    public int attemptsUsed = 0;
-    Context context;
+    private GameStatus gameStatus;
+    private ArrayList<Word> dictionary;
+    private String[] resultArray = null;
+    private String[] guessArray = null;
+    private String category = null;
+    private Context context;
 
     public GameEngine(Context ctx, InputStream words){
         /* Initialize variables */
         context = ctx;
-        dictionary = new ArrayList<String>();
-        createDictionary(words);
-        wordToGuess = getWord().toCharArray();
-        guessArray = convertWordToUnderscores(wordToGuess);
+        gameStatus = new GameStatus();
+        dictionary = createDictionary(words);
     }
 
-    public void reset(){
-        wordToGuess = getWord().toCharArray();
-        guessArray = convertWordToUnderscores(wordToGuess);
-        attemptsUsed = 0;
+    public String[] getGuessArray(){
+        if (guessArray == null || gameStatus.isGameOver()){
+            reinitialize();
+        }
+        return guessArray;
     }
 
-    private ArrayList<String> createDictionary(InputStream inputStream){
+    public String[] getResultArray(){
+        if (resultArray == null){
+            reinitialize();
+        }
+        return resultArray;
+    }
 
+    public String getCategory(){
+        if (category == null){
+            reinitialize();
+        }
+        return category;
+    }
+
+    public void newWord(){
+        category = null;
+        resultArray = null;
+        guessArray = null;
+        reinitialize();
+    }
+
+    private void reinitialize(){
+        if (gameStatus.isWon() == false)
+            gameStatus = new GameStatus();
+        else {
+            gameStatus.newRound();
+        }
+        Word word = getWord();
+        resultArray = Helper.stringToArray(word.word);
+        category = word.category;
+        guessArray = convertWordToUnderscores(resultArray);
+    }
+
+    private ArrayList<Word> createDictionary(InputStream inputStream){
+        ArrayList<Word> words = new ArrayList<Word>();
         BufferedReader dict = null;
         try {
-            //dictionary.txt should be in the assets folder.
             dict = new BufferedReader(new InputStreamReader(inputStream));
 
             String word;
+            String category = null;
             while((word = dict.readLine()) != null){
-                if(word.length() >= 3){
-                    dictionary.add(word);
+                // if word contains "%" then skip
+                if (word.contains("%"))
+                    continue;
+
+
+                if (word.contains("#")){
+                    category = word.replace("#", "").trim();
+                    continue;
                 }
+
+                if (category == null)
+                    category = context.getString(R.string.CategoryNotFound);
+
+                word = word.trim();
+                // TODO: USE WORD INSTEAD of "hangman".
+                words.add(new Word(word, category));
             }
 
         } catch (FileNotFoundException e){
@@ -67,19 +109,19 @@ public class GameEngine {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return dictionary;
+        return words;
     }
 
-    public List<Integer> findIndexOfChar(Character ch){
+    public List<Integer> findIndexOfChar(String ch){
         List<Integer> result = new ArrayList<Integer>();
-        for (int i = 0; i < wordToGuess.length; i++){
-            if (Character.toLowerCase(wordToGuess[i]) == ch){
+        for (int i = 0; i < resultArray.length; i++){
+            if (resultArray[i].toLowerCase().equals(ch.toLowerCase())){
                 result.add(i);
             }
         }
 
         if (result.size() == 0){
-            attemptsUsed++;
+            gameStatus.incAttempts();
         }
 
         return result;
@@ -87,7 +129,7 @@ public class GameEngine {
 
     public int getImage(){
         int result = 0;
-        switch (attemptsUsed){
+        switch (gameStatus.getAttemptsUsed()){
             case 0:
                 result = R.drawable.hangman1;
                 break;
@@ -110,38 +152,56 @@ public class GameEngine {
         return result;
     }
 
-    public boolean isGameWon(){
-        String facit = Helper.charArrayToString(wordToGuess).toLowerCase();
-        String guess = Helper.charArrayToString(guessArray).toLowerCase();
+    public GameStatus getStatus(){
+        return gameStatus;
+    }
 
-        return facit.equals(guess);
+    public boolean isGameWon(){
+        boolean result = true;
+
+        for (int i = 0; i < resultArray.length; i++){
+            if (resultArray[i].equals(guessArray[i]) == false){
+                result = false;
+                break;
+            }
+        }
+
+        if (result == true){
+            gameStatus.setWon(true);
+            gameStatus.addPoints(resultArray);
+        }
+
+        return result;
     }
 
     public boolean isGameOver(){
-        if (attemptsUsed >= MAX_ATTEMPS){
+        if (gameStatus.isAllAttempsUsed()){
+            gameStatus.setLost(true);
             return true;
         } else {
             return false;
         }
     }
 
-    private String getWord(){
-        String word;
+    private Word getWord(){
+        Word word;
         if (dictionary.size() > 0){
             word = dictionary.get((int)(Math.random() * dictionary.size()));
         } else{
-            word = "Hangman";
+            word = new Word("Hangman", context.getString(R.string.CategoryNotFound));
         }
         return word;
     }
 
-    private char[] convertWordToUnderscores(char[] wordToConvert){
-        char[] result = new char[wordToConvert.length];
+    private String[] convertWordToUnderscores(String[] wordToConvert){
+        String[] result = new String[wordToConvert.length];
         for (int i = 0; i < wordToConvert.length; i++){
-            if (wordToConvert[i] != ' '){
-                result[i] = '_';
+            if (wordToConvert[i].equals(" ")) {
+                result[i] = " ";
+            } else if (wordToConvert[i].equals("-")) {
+                result[i] = "-";
             } else {
-                result[i] = ' ';
+                result[i] = "_";
             }
         }
         return result;

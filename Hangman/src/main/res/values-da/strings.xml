@@ -1,0 +1,24 @@
+<resources>
+    <string name="ErrNoInput">Giv et gæt</string>
+    <string name="GameOver">Spillet er tabt</string>
+    <string name="ImageDescription">Hangman</string>
+    <string name="ResetBtn">Nyt ord</string>
+    <string name="Win">Tillykke du vandt!</string>
+    <string name="abc_action_bar_home_description">Naviger hjem</string>
+    <string name="abc_action_bar_up_description">Naviger op</string>
+    <string name="abc_action_menu_overflow_description">Flere muligheder</string>
+    <string name="abc_action_mode_done">Færdig</string>
+    <string name="abc_activity_chooser_view_see_all">Se alle</string>
+    <string name="abc_activitychooserview_choose_application">Vælg en app</string>
+    <string name="abc_searchview_description_clear">Slet sætning</string>
+    <string name="abc_searchview_description_query">Søg sætning</string>
+    <string name="abc_searchview_description_search">Søg</string>
+    <string name="abc_searchview_description_voice">Stemmesøgning</string>
+    <string name="abc_shareactionprovider_share_with">Del med</string>
+    <string name="abc_shareactionprovider_share_with_application">Del med %s</string>
+    <string name="action_settings">Indstillinger</string>
+    <string name="app_name">Hangman</string>
+    <string name="btnCheck">Tjek</string>
+    <string name="StringSpace">  </string>
+
+</resources>

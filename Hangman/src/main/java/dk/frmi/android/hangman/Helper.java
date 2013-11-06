@@ -23,8 +23,12 @@ import java.util.List;
  */
 public class Helper {
 
-    public static String charArrayToString(char[] array){
-        return new String(array);
+    public static String stringArrayToString(String[] array){
+        String str = "";
+        for (int i = 0; i < array.length; i++){
+            str += array[i];
+        }
+        return str;
     }
 
     public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId) {
@@ -33,4 +37,13 @@ public class Helper {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         return BitmapFactory.decodeResource(res, resId, options);
     }
+
+    public static String[] stringToArray(String str){
+        String[] strArray = new String[str.length()];
+        for(int i = 0; i < str.length(); i++){
+            strArray[i] = String.valueOf(str.charAt(i));
+        }
+        return strArray;
+    }
+
 }
