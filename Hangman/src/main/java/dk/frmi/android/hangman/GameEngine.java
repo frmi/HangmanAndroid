@@ -31,38 +31,27 @@ public class GameEngine {
 
     public String[] getGuessArray(){
         if (guessArray == null || gameStatus.isGameOver()){
-            reinitialize();
+            newWord();
         }
         return guessArray;
     }
 
     public String[] getResultArray(){
         if (resultArray == null){
-            reinitialize();
+            newWord();
         }
         return resultArray;
     }
 
     public String getCategory(){
         if (category == null){
-            reinitialize();
+            newWord();
         }
         return category;
     }
 
     public void newWord(){
-        category = null;
-        resultArray = null;
-        guessArray = null;
-        reinitialize();
-    }
-
-    private void reinitialize(){
-        if (gameStatus.isWon() == false)
-            gameStatus = new GameStatus();
-        else {
-            gameStatus.newRound();
-        }
+        gameStatus.newRound();
         Word word = getWord();
         resultArray = Helper.stringToArray(word.word);
         category = word.category;
@@ -92,7 +81,6 @@ public class GameEngine {
                     category = context.getString(R.string.CategoryNotFound);
 
                 word = word.trim();
-                // TODO: USE WORD INSTEAD of "hangman".
                 words.add(new Word(word, category));
             }
 
@@ -177,6 +165,7 @@ public class GameEngine {
     public boolean isGameOver(){
         if (gameStatus.isAllAttempsUsed()){
             gameStatus.setLost(true);
+            gameStatus.subPoints(resultArray);
             return true;
         } else {
             return false;

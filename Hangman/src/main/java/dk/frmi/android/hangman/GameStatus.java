@@ -30,7 +30,11 @@ public class GameStatus {
     }
 
     public void newRound(){
+        if (attemptsUsed >= MAX_ATTEMPS || (!isLost && !isWon)) {
+            streak = 0;
+        }
         attemptsUsed = 0;
+        isAllAttempsUsed = false;
         isWon = false;
         isLost = false;
     }
@@ -42,9 +46,16 @@ public class GameStatus {
         }
     }
 
+    public void subPoints(String[] resultArray){
+        streak = 0;
+        if (points > 0){
+            this.points -= PointCalculator.calculateLostPoints(resultArray);
+        }
+    }
+
     public void addPoints(String[] resultArray){
         streak++;
-        this.points += PointCalculator.calculatePoints(resultArray, attemptsUsed, streak);
+        this.points += PointCalculator.calculateWinPoints(resultArray, attemptsUsed, streak);
     }
 
     public void setWon(boolean isWon) {

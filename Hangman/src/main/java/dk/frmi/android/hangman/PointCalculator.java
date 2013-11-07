@@ -16,7 +16,7 @@ public class PointCalculator {
     private final static int POINTS_PER_ATTEMP = -2;
     private final static float EXP_PER_STREAK = 0.2F;
 
-    public static int calculatePoints(String[] word, int attemps, int streak){
+    public static int calculateWinPoints(String[] word, int attemps, int streak){
         int points = 0;
         int wordLength = word.length;
         int amountOfConsonants = 0;
@@ -39,5 +39,9 @@ public class PointCalculator {
         points += points + (points * (streak * EXP_PER_STREAK));
 
         return points;
+    }
+
+    public static int calculateLostPoints(String[] word){
+        return word.length * POINTS_LENGTH;
     }
 }

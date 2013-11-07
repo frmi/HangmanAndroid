@@ -61,7 +61,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if (game.getStatus().isWon() == false && game.getStatus().isLost() == false){
-                    showDialogOkCancel("Warning", "This will reset your points and your streak, are you sure you want to proceed?", new Callable<Void>() {
+                    showDialogOkCancel("Warning", "This will reset your streak and you will lose points for this word, are you sure you want to proceed?", new Callable<Void>() {
                         @Override
                         public Void call() throws Exception {
                             return resetWordAndImage();
