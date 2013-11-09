@@ -6,6 +6,7 @@ package dk.frmi.android.hangman;
 public class GameStatus {
     private final int MAX_ATTEMPS = 5;
 
+    private int maxPoints;
     private int points;
     private int streak;
     private int attemptsUsed;
@@ -29,14 +30,17 @@ public class GameStatus {
         return isWon || isLost;
     }
 
-    public void newRound(){
+    public boolean newRound(){
+        boolean shouldSubtractPoints = false;
         if (attemptsUsed >= MAX_ATTEMPS || (!isLost && !isWon)) {
             streak = 0;
+            shouldSubtractPoints = true;
         }
         attemptsUsed = 0;
         isAllAttempsUsed = false;
         isWon = false;
         isLost = false;
+        return shouldSubtractPoints;
     }
 
     public void incAttempts(){
@@ -72,6 +76,13 @@ public class GameStatus {
 
     public boolean isLost() {
         return isLost;
+    }
+
+    public String getMaxPoints(){
+        if (points > maxPoints){
+            maxPoints = points;
+        }
+        return String.valueOf(maxPoints);
     }
 
     public String getPoints(){

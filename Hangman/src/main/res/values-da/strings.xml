@@ -18,7 +18,11 @@
     <string name="abc_shareactionprovider_share_with_application">Del med %s</string>
     <string name="action_settings">Indstillinger</string>
     <string name="app_name">Hangman</string>
-    <string name="btnCheck">Tjek</string>
-    <string name="StringSpace">  </string>
+    <string name="Opponent">Modstander</string>
+    <string name="Streak">Streak</string>
+    <string name="Points">Point</string>
+    <string name="categoryLbl">Kategori:</string>
+    <string name="CategoryNotFound">Kategori blev ikke fundet</string>
+    <string name="MaxPoints">Max points</string>
 
 </resources>

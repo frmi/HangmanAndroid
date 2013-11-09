@@ -17,9 +17,7 @@ public class GameEngine {
 
     private GameStatus gameStatus;
     private ArrayList<Word> dictionary;
-    private String[] resultArray = null;
-    private String[] guessArray = null;
-    private String category = null;
+    private Word word;
     private Context context;
 
     public GameEngine(Context ctx, InputStream words){
@@ -27,35 +25,36 @@ public class GameEngine {
         context = ctx;
         gameStatus = new GameStatus();
         dictionary = createDictionary(words);
+        word = getWord();
     }
 
     public String[] getGuessArray(){
-        if (guessArray == null || gameStatus.isGameOver()){
+        if (word.guess == null || gameStatus.isGameOver()){
             newWord();
         }
-        return guessArray;
+        return word.guess;
     }
 
     public String[] getResultArray(){
-        if (resultArray == null){
+        if (word.facit == null){
             newWord();
         }
-        return resultArray;
+        return word.facit;
     }
 
     public String getCategory(){
-        if (category == null){
+        if (word.category == null){
             newWord();
         }
-        return category;
+        return word.category;
     }
 
     public void newWord(){
-        gameStatus.newRound();
-        Word word = getWord();
-        resultArray = Helper.stringToArray(word.word);
-        category = word.category;
-        guessArray = convertWordToUnderscores(resultArray);
+        boolean shouldSubtractPoints = gameStatus.newRound();
+        if (shouldSubtractPoints){
+            gameStatus.subPoints(word.facit);
+        }
+        word = getWord();
     }
 
     private ArrayList<Word> createDictionary(InputStream inputStream){
@@ -102,8 +101,8 @@ public class GameEngine {
 
     public List<Integer> findIndexOfChar(String ch){
         List<Integer> result = new ArrayList<Integer>();
-        for (int i = 0; i < resultArray.length; i++){
-            if (resultArray[i].toLowerCase().equals(ch.toLowerCase())){
+        for (int i = 0; i < word.facit.length; i++){
+            if (word.facit[i].toLowerCase().equals(ch.toLowerCase())){
                 result.add(i);
             }
         }
@@ -147,8 +146,8 @@ public class GameEngine {
     public boolean isGameWon(){
         boolean result = true;
 
-        for (int i = 0; i < resultArray.length; i++){
-            if (resultArray[i].equals(guessArray[i]) == false){
+        for (int i = 0; i < word.facit.length; i++){
+            if (word.facit[i].equals(word.guess[i]) == false){
                 result = false;
                 break;
             }
@@ -156,7 +155,7 @@ public class GameEngine {
 
         if (result == true){
             gameStatus.setWon(true);
-            gameStatus.addPoints(resultArray);
+            gameStatus.addPoints(word.facit);
         }
 
         return result;
@@ -165,7 +164,7 @@ public class GameEngine {
     public boolean isGameOver(){
         if (gameStatus.isAllAttempsUsed()){
             gameStatus.setLost(true);
-            gameStatus.subPoints(resultArray);
+            gameStatus.subPoints(word.facit);
             return true;
         } else {
             return false;
@@ -179,20 +178,7 @@ public class GameEngine {
         } else{
             word = new Word("Hangman", context.getString(R.string.CategoryNotFound));
         }
+        //word = new Word("hold fast-mand", "test"); // USED FOR TESTING
         return word;
-    }
-
-    private String[] convertWordToUnderscores(String[] wordToConvert){
-        String[] result = new String[wordToConvert.length];
-        for (int i = 0; i < wordToConvert.length; i++){
-            if (wordToConvert[i].equals(" ")) {
-                result[i] = " ";
-            } else if (wordToConvert[i].equals("-")) {
-                result[i] = "-";
-            } else {
-                result[i] = "_";
-            }
-        }
-        return result;
     }
 }

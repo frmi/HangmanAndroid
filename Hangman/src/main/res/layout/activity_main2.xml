@@ -24,61 +24,112 @@
 
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Points"
-                    android:id="@+id/pointsText" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Streak"
-                    android:id="@+id/streakText" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Opponent"
-                    android:id="@+id/opponentText" />
-
-            </LinearLayout>
-
-            <Space
-                android:layout_width="20dp"
-                android:layout_height="match_parent" />
-
-            <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="wrap_content">
 
-                <TextView
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="0"
-                    android:id="@+id/points" />
+                    android:layout_height="wrap_content">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="0"
-                    android:id="@+id/streak" />
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/linearLayout2" >
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="NAN"
-                    android:id="@+id/opponent" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="@string/Points"
+                            android:id="@+id/pointsText" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:id="@+id/points"
+                            android:singleLine="false" />
+                    </LinearLayout>
+
+                    <Space
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/linearLayout" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="@string/Streak"
+                            android:id="@+id/streakText" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:id="@+id/streak" />
+                    </LinearLayout>
+
+                    <Space
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/space" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/linearLayout3">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="@string/MaxPoints"
+                            android:id="@+id/textView2" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:id="@+id/maxPointsView" />
+                    </LinearLayout>
+
+                    <Space
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/space2" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="invisible">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="@string/Opponent"
+                            android:id="@+id/opponentText" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:id="@+id/opponent"
+                            android:text="N/A" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
@@ -98,6 +149,13 @@
             android:layout_margin="5dp"
             android:contentDescription="@string/ImageDescription" />
     </FrameLayout>
+
+    <Space
+        android:layout_width="20dp"
+        android:layout_height="20px"
+        android:id="@+id/space3"
+        android:visibility="gone"
+        android:layout_gravity="right" />
 
     <FrameLayout
         android:layout_width="fill_parent"
@@ -119,7 +177,8 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/categoryLbl"
-                    android:id="@+id/textView" />
+                    android:id="@+id/textView"
+                    android:layout_marginLeft="4dp" />
 
                 <Space
                     android:layout_width="10dp"
@@ -132,12 +191,11 @@
                     android:id="@+id/categoryView" />
             </LinearLayout>
 
-            <TextView
+            <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/wordToGuess"
-                android:gravity="center_vertical|center_horizontal" />
+                android:id="@+id/wordLayout" />
+
 
             <Space
                 android:layout_width="20dp"

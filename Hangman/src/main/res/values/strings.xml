@@ -12,5 +12,9 @@
     <string name="CategoryNotFound">Category not found</string>
     <string name="categoryLbl">Category:</string>
     <string name="StringSpace">  </string>
+    <string name="Opponent">Opponent</string>
+    <string name="Streak">Streak</string>
+    <string name="Points">Points</string>
+    <string name="MaxPoints">Max points</string>
 
 </resources>

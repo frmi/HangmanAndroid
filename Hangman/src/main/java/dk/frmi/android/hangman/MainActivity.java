@@ -7,9 +7,11 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +26,8 @@ public class MainActivity extends Activity {
     Button qBtn, wBtn, eBtn, rBtn, tBtn, yBtn, uBtn, iBtn, oBtn, pBtn, aaBtn, aBtn, sBtn, dBtn, fBtn, gBtn, hBtn, jBtn, kBtn, lBtn, aeBtn, oeBtn, zBtn, xBtn, cBtn, vBtn, bBtn, nBtn, mBtn;
     List<Button> keyboardButtons;
     Button resetBtn;
-    TextView wordText = null;
+    LetterSpacingTextView wordText = null;
+    TextView maxPointsView = null;
     TextView pointsView = null;
     TextView streakView = null;
     TextView categoryView = null;
@@ -49,9 +52,14 @@ public class MainActivity extends Activity {
         /* Initialize widgets */
         initKeyboardButtons();
         resetBtn = (Button) findViewById(R.id.newWordBtn);
-        wordText = (TextView) findViewById(R.id.wordToGuess);
+        wordText = new LetterSpacingTextView(this);
+        wordText.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+        wordText.setLetterSpacing(LetterSpacingTextView.LetterSpacing.NORMAL);
+        //Add the textView in a layout, for instance:
+        ((FrameLayout) findViewById(R.id.wordLayout)).addView(wordText);
         pointsView = (TextView) findViewById(R.id.points);
         streakView = (TextView) findViewById(R.id.streak);
+        maxPointsView = (TextView) findViewById(R.id.maxPointsView);
         categoryView = (TextView) findViewById(R.id.categoryView);
         imageView = (ImageView) findViewById(R.id.imageView);
         resetWordAndImage();
@@ -90,7 +98,7 @@ public class MainActivity extends Activity {
 
     private void deactivateBtn(Button btn){
         int color;
-        if (wrongGuess == true)
+        if (wrongGuess)
             color = Color.RED;
         else
             color = Color.GREEN;
@@ -421,6 +429,7 @@ public class MainActivity extends Activity {
         GameStatus status = game.getStatus();
         pointsView.setText(status.getPoints());
         streakView.setText(status.getStreak());
+        maxPointsView.setText(status.getMaxPoints());
     }
 
     public void showDialogOkCancel(String title, CharSequence message, final Callable<Void> positiveFunc, final Callable<Void> negativeFunc) {
