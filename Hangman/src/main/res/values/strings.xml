@@ -14,7 +14,23 @@
     <string name="StringSpace">  </string>
     <string name="Opponent">Opponent</string>
     <string name="Streak">Streak</string>
-    <string name="Points">Points</string>
-    <string name="MaxPoints">Max points</string>
+    <string name="Points">Score</string>
+    <string name="MaxPoints">Highest score</string>
+    <string name="PlayBtn">Start new game</string>
+    <string name="Language">Language:</string>
+    <string name="Difficulty">Difficulty:</string>
+    <string name="Warning">Warning</string>
+    <string name="WarningMessage">This will reset your streak and you will lose score for this word.\nDo you want to proceed?</string>
+    <string name="WelcomeMessage">Ready for a game of Hangman?</string>
 
+    <string-array name="difficulties_array">
+        <item>Easy</item>
+        <item>Normal</item>
+        <item>Hard</item>
+    </string-array>
+
+    <string-array name="language_array">
+        <item>English</item>
+        <item>Danish</item>
+    </string-array>
 </resources>

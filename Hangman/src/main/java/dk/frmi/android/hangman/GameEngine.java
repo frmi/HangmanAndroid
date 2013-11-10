@@ -14,47 +14,78 @@ import java.util.List;
  * Created by Frederik on 01-11-13.
  */
 public class GameEngine {
+    private GameStatus _gameStatus;
+    private ArrayList<Word> _dictionary;
+    private Word _word;
+    private Context _context;
+    private int _difficulty;
 
-    private GameStatus gameStatus;
-    private ArrayList<Word> dictionary;
-    private Word word;
-    private Context context;
-
-    public GameEngine(Context ctx, InputStream words){
+    public GameEngine(Context context, int language, int difficulty){
         /* Initialize variables */
-        context = ctx;
-        gameStatus = new GameStatus();
-        dictionary = createDictionary(words);
-        word = getWord();
+        _context = context;
+        _gameStatus = new GameStatus();
+        _difficulty = difficulty;
+        InputStream inputStream = resolveLanguage(language);
+        _dictionary = createDictionary(inputStream);
+        _word = getWord();
     }
 
     public String[] getGuessArray(){
-        if (word.guess == null || gameStatus.isGameOver()){
+        if (_word.guess == null || _gameStatus.isGameOver()){
             newWord();
         }
-        return word.guess;
+        return _word.guess;
     }
 
     public String[] getResultArray(){
-        if (word.facit == null){
+        if (_word.facit == null){
             newWord();
         }
-        return word.facit;
+        return _word.facit;
     }
 
     public String getCategory(){
-        if (word.category == null){
+        if (_word.category == null){
             newWord();
         }
-        return word.category;
+        return _word.category;
     }
 
     public void newWord(){
-        boolean shouldSubtractPoints = gameStatus.newRound();
+        boolean shouldSubtractPoints = _gameStatus.newRound();
         if (shouldSubtractPoints){
-            gameStatus.subPoints(word.facit);
+            _gameStatus.subPoints(_word.facit);
         }
-        word = getWord();
+        _word = getWord();
+    }
+
+    private InputStream resolveLanguage(int languageId){
+        int result;
+
+        switch (languageId){
+            case 0:
+                result = R.raw.uk_cat;
+                break;
+            case 1:
+                result = R.raw.dk_cat;
+                break;
+            default:
+                result = R.raw.uk_cat;
+        }
+        return  _context.getResources().openRawResource(result);
+    }
+
+    private boolean doesWordMatchDifficulty(String word){
+        boolean result = false;
+        if (_difficulty == Difficulty.Easy.ordinal() && word.length() <= 4){
+            result = true;
+        } else if (_difficulty == Difficulty.Normal.ordinal() && word.length() <= 6) {
+            result = true;
+        } else if (_difficulty == Difficulty.Hard.ordinal() && word.length() > 4){
+            result = true;
+        }
+
+        return result;
     }
 
     private ArrayList<Word> createDictionary(InputStream inputStream){
@@ -77,10 +108,12 @@ public class GameEngine {
                 }
 
                 if (category == null)
-                    category = context.getString(R.string.CategoryNotFound);
+                    category = _context.getString(R.string.CategoryNotFound);
 
-                word = word.trim();
-                words.add(new Word(word, category));
+                if (doesWordMatchDifficulty(word)){
+                    word = word.trim();
+                    words.add(new Word(word, category));
+                }
             }
 
         } catch (FileNotFoundException e){
@@ -101,14 +134,14 @@ public class GameEngine {
 
     public List<Integer> findIndexOfChar(String ch){
         List<Integer> result = new ArrayList<Integer>();
-        for (int i = 0; i < word.facit.length; i++){
-            if (word.facit[i].toLowerCase().equals(ch.toLowerCase())){
+        for (int i = 0; i < _word.facit.length; i++){
+            if (_word.facit[i].toLowerCase().equals(ch.toLowerCase())){
                 result.add(i);
             }
         }
 
         if (result.size() == 0){
-            gameStatus.incAttempts();
+            _gameStatus.incAttempts();
         }
 
         return result;
@@ -116,7 +149,7 @@ public class GameEngine {
 
     public int getImage(){
         int result = 0;
-        switch (gameStatus.getAttemptsUsed()){
+        switch (_gameStatus.getAttemptsUsed()){
             case 0:
                 result = R.drawable.hangman1;
                 break;
@@ -140,31 +173,31 @@ public class GameEngine {
     }
 
     public GameStatus getStatus(){
-        return gameStatus;
+        return _gameStatus;
     }
 
     public boolean isGameWon(){
         boolean result = true;
 
-        for (int i = 0; i < word.facit.length; i++){
-            if (word.facit[i].equals(word.guess[i]) == false){
+        for (int i = 0; i < _word.facit.length; i++){
+            if (_word.facit[i].equals(_word.guess[i]) == false){
                 result = false;
                 break;
             }
         }
 
         if (result == true){
-            gameStatus.setWon(true);
-            gameStatus.addPoints(word.facit);
+            _gameStatus.setWon(true);
+            _gameStatus.addPoints(_word.facit);
         }
 
         return result;
     }
 
     public boolean isGameOver(){
-        if (gameStatus.isAllAttempsUsed()){
-            gameStatus.setLost(true);
-            gameStatus.subPoints(word.facit);
+        if (_gameStatus.isAllAttempsUsed()){
+            _gameStatus.setLost(true);
+            _gameStatus.subPoints(_word.facit);
             return true;
         } else {
             return false;
@@ -173,10 +206,10 @@ public class GameEngine {
 
     private Word getWord(){
         Word word;
-        if (dictionary.size() > 0){
-            word = dictionary.get((int)(Math.random() * dictionary.size()));
+        if (_dictionary.size() > 0){
+            word = _dictionary.get((int)(Math.random() * _dictionary.size()));
         } else{
-            word = new Word("Hangman", context.getString(R.string.CategoryNotFound));
+            word = new Word("Hangman", _context.getString(R.string.CategoryNotFound));
         }
         //word = new Word("hold fast-mand", "test"); // USED FOR TESTING
         return word;

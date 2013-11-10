@@ -52,7 +52,7 @@ public class GameStatus {
 
     public void subPoints(String[] resultArray){
         streak = 0;
-        if (points > 0){
+        if (points > 0 && resultArray != null){
             this.points -= PointCalculator.calculateLostPoints(resultArray);
         }
     }

@@ -49,7 +49,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:id="@+id/points"
+                            android:id="@+id/score"
                             android:singleLine="false" />
                     </LinearLayout>
 
@@ -149,13 +149,6 @@
             android:layout_margin="5dp"
             android:contentDescription="@string/ImageDescription" />
     </FrameLayout>
-
-    <Space
-        android:layout_width="20dp"
-        android:layout_height="20px"
-        android:id="@+id/space3"
-        android:visibility="gone"
-        android:layout_gravity="right" />
 
     <FrameLayout
         android:layout_width="fill_parent"
