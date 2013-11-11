@@ -13,50 +13,49 @@ import java.util.List;
 /**
  * Created by Frederik on 01-11-13.
  */
-public class GameEngine {
+public class GameMechanics {
     private GameStatus _gameStatus;
     private ArrayList<Word> _dictionary;
-    private Word _word;
     private Context _context;
     private int _difficulty;
 
-    public GameEngine(Context context, int language, int difficulty){
+    public GameMechanics(Context context, int language, int difficulty){
         /* Initialize variables */
         _context = context;
         _gameStatus = new GameStatus();
         _difficulty = difficulty;
         InputStream inputStream = resolveLanguage(language);
         _dictionary = createDictionary(inputStream);
-        _word = getWord();
+        _gameStatus.setWord(getWord());
     }
 
     public String[] getGuessArray(){
-        if (_word.guess == null || _gameStatus.isGameOver()){
+        if (_gameStatus.getWord().guess == null || _gameStatus.isGameOver()){
             newWord();
         }
-        return _word.guess;
+        return _gameStatus.getWord().guess;
     }
 
     public String[] getResultArray(){
-        if (_word.facit == null){
+        if (_gameStatus.getWord().facit == null){
             newWord();
         }
-        return _word.facit;
+        return _gameStatus.getWord().facit;
     }
 
     public String getCategory(){
-        if (_word.category == null){
+        if (_gameStatus.getWord().category == null){
             newWord();
         }
-        return _word.category;
+        return _gameStatus.getWord().category;
     }
 
     public void newWord(){
         boolean shouldSubtractPoints = _gameStatus.newRound();
         if (shouldSubtractPoints){
-            _gameStatus.subPoints(_word.facit);
+            _gameStatus.subPoints(_gameStatus.getWord().facit);
         }
-        _word = getWord();
+        _gameStatus.setWord(getWord());
     }
 
     private InputStream resolveLanguage(int languageId){
@@ -134,8 +133,9 @@ public class GameEngine {
 
     public List<Integer> findIndexOfChar(String ch){
         List<Integer> result = new ArrayList<Integer>();
-        for (int i = 0; i < _word.facit.length; i++){
-            if (_word.facit[i].toLowerCase().equals(ch.toLowerCase())){
+        String[] facit = _gameStatus.getWord().facit;
+        for (int i = 0; i < facit.length; i++){
+            if (facit[i].toLowerCase().equals(ch.toLowerCase())){
                 result.add(i);
             }
         }
@@ -179,8 +179,9 @@ public class GameEngine {
     public boolean isGameWon(){
         boolean result = true;
 
-        for (int i = 0; i < _word.facit.length; i++){
-            if (_word.facit[i].equals(_word.guess[i]) == false){
+        String[] facit = _gameStatus.getWord().facit;
+        for (int i = 0; i < facit.length; i++){
+            if (facit[i].equals(_gameStatus.getWord().guess[i]) == false){
                 result = false;
                 break;
             }
@@ -188,7 +189,7 @@ public class GameEngine {
 
         if (result == true){
             _gameStatus.setWon(true);
-            _gameStatus.addPoints(_word.facit);
+            _gameStatus.addPoints(facit);
         }
 
         return result;
@@ -197,7 +198,7 @@ public class GameEngine {
     public boolean isGameOver(){
         if (_gameStatus.isAllAttempsUsed()){
             _gameStatus.setLost(true);
-            _gameStatus.subPoints(_word.facit);
+            _gameStatus.subPoints(_gameStatus.getWord().facit);
             return true;
         } else {
             return false;
@@ -214,4 +215,5 @@ public class GameEngine {
         //word = new Word("hold fast-mand", "test"); // USED FOR TESTING
         return word;
     }
+
 }

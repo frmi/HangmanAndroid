@@ -43,7 +43,7 @@ public class ActiveGamesActivity extends Activity {
                 Game game = (Game) gamesList.getSelectedItem();
                 /* TODO: implement open saved game
                  * Change constructors of other classes
-                 * Fix tables for GameStatus and GameEngine.
+                 * Fix tables for GameStatus and GameMechanics.
                  */
             }
         });

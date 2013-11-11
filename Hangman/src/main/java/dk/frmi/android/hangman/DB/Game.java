@@ -6,6 +6,10 @@ public class Game {
     private long highestScore;
     private long score;
     private long streak;
+    private long attemptsUsed;
+    private String result;
+    private String guess;
+    private String category;
 
     public long getId() {
         return id;
@@ -23,31 +27,39 @@ public class Game {
         return highestScore;
     }
 
-    public void setHighestScore(long highestScore) {
-        this.highestScore = highestScore;
-    }
-
     public long getScore() {
         return score;
-    }
-
-    public void setScore(long score) {
-        this.score = score;
     }
 
     public long getStreak() {
         return streak;
     }
 
-    public void setStreak(long streak) {
-        this.streak = streak;
+    public String getResult() {
+        return result;
     }
 
-    public void setGame(String opponent, long highestScore, long score, long streak) {
+    public long getAttemptsUsed() {
+        return attemptsUsed;
+    }
+
+    public String getGuess() {
+        return guess;
+    }
+    public String getCategory() {
+        return category;
+    }
+
+    public void setGame(String opponent, long highestScore, long score, long streak,
+                        long attemptsUsed, String result, String guess, String category) {
         this.opponent = opponent;
         this.highestScore = highestScore;
         this.score = score;
         this.streak = streak;
+        this.attemptsUsed = attemptsUsed;
+        this.result = result;
+        this.guess = guess;
+        this.category = category;
     }
 
     // Will be used by the ArrayAdapter in the ListView

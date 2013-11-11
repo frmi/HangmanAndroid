@@ -6,6 +6,7 @@ package dk.frmi.android.hangman;
 public class GameStatus {
     private final int MAX_ATTEMPS = 5;
 
+    private int id;
     private int maxPoints;
     private int points;
     private int streak;
@@ -13,6 +14,8 @@ public class GameStatus {
     private boolean isAllAttempsUsed = false;
     private boolean isWon = false;
     private boolean isLost = false;
+    private String opponent = "NONE";
+    private Word word;
 
     public GameStatus(){
         points = 0;
@@ -20,7 +23,7 @@ public class GameStatus {
         attemptsUsed = 0;
     }
 
-    public GameStatus(int points, int streak, int attemptsUsed){
+    public GameStatus(int points, int streak, int attemptsUsed, Word word){
         this.points = points;
         this.streak = streak;
         this.attemptsUsed = attemptsUsed;
@@ -62,6 +65,14 @@ public class GameStatus {
         this.points += PointCalculator.calculateWinPoints(resultArray, attemptsUsed, streak);
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void setWon(boolean isWon) {
         this.isWon = isWon;
     }
@@ -99,5 +110,22 @@ public class GameStatus {
 
     public boolean isAllAttempsUsed() {
         return isAllAttempsUsed;
+    }
+
+
+    public Word getWord() {
+        return word;
+    }
+
+    public void setWord(Word word) {
+        this.word = word;
+    }
+
+    public String getOpponent() {
+        return opponent;
+    }
+
+    public void setOpponent(String opponent) {
+        this.opponent = opponent;
     }
 }

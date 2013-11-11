@@ -21,11 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import dk.frmi.android.hangman.GameEngine;
-import dk.frmi.android.hangman.GameStatus;
-import dk.frmi.android.hangman.Helper;
-import dk.frmi.android.hangman.LetterSpacingTextView;
-import dk.frmi.android.hangman.R;
+import dk.frmi.android.hangman.DB.Game;
+import dk.frmi.android.hangman.DB.GamesDataSource;
+import dk.frmi.android.hangman.DB.MySQLiteHelper;
 
 public class GameActivity extends Activity {
 
@@ -38,13 +36,16 @@ public class GameActivity extends Activity {
     TextView streakView = null;
     TextView categoryView = null;
     ImageView imageView = null;
-    GameEngine game = null;
+    GameMechanics gameMechanics = null;
+    GamesDataSource datasource;
     boolean wrongGuess = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        datasource = new GamesDataSource(this);
+        datasource.open();
         initializeElements();
     }
 
@@ -52,7 +53,7 @@ public class GameActivity extends Activity {
         /* Game Engine */
         int difficulty = getIntent().getIntExtra("DIFFICULTY", 0);
         int language = getIntent().getIntExtra("LANGUAGE", 0);
-        game = new GameEngine(this, language, difficulty);
+        gameMechanics = new GameMechanics(this, language, difficulty);
 
         /* initialize variables */
         keyboardButtons = new ArrayList<Button>();
@@ -76,10 +77,10 @@ public class GameActivity extends Activity {
         resetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (game.getStatus().isWon()) {
+                if (gameMechanics.getStatus().isWon()) {
                     resetWordAndImage();
                 } else {
-                    if ((game.getStatus().isLost())) {
+                    if ((gameMechanics.getStatus().isLost())) {
                         resetWordAndImage();
                     } else {
                         showDialogOkCancel(getString(R.string.Warning), getString(R.string.WarningMessage), new Callable<Void>() {
@@ -95,8 +96,8 @@ public class GameActivity extends Activity {
     }
 
     private Void resetWordAndImage(){
-        game.newWord();
-        updateWordAndCategoryView(game.getGuessArray());
+        gameMechanics.newWord();
+        updateWordAndCategoryView(gameMechanics.getGuessArray());
         updateScoreboard();
         ImageBackgroundTask task = new ImageBackgroundTask(imageView);
         task.execute(R.drawable.hangman);
@@ -392,13 +393,13 @@ public class GameActivity extends Activity {
     }
 
     private void guess(String ch){
-        String[] guessArray = game.getGuessArray();
-        String[] resultArray = game.getResultArray();
-        List<Integer> results = game.findIndexOfChar(ch);
+        String[] guessArray = gameMechanics.getGuessArray();
+        String[] resultArray = gameMechanics.getResultArray();
+        List<Integer> results = gameMechanics.findIndexOfChar(ch);
         if (results.size() == 0){
             wrongGuess = true;
             ImageBackgroundTask task = new ImageBackgroundTask(imageView);
-            task.execute(game.getImage());
+            task.execute(gameMechanics.getImage());
         } else {
             for (Integer i : results){
                 guessArray[i] = resultArray[i];
@@ -411,14 +412,14 @@ public class GameActivity extends Activity {
     }
 
     private void checkGameStatus(){
-        if (game.isGameOver()){
+        if (gameMechanics.isGameOver()){
             updateScoreboard();
-            updateWordAndCategoryView("Ordet var: " + Helper.stringArrayToString(game.getResultArray()));
+            updateWordAndCategoryView("Ordet var: " + Helper.stringArrayToString(gameMechanics.getResultArray()));
             Toast.makeText(this, R.string.GameOver, Toast.LENGTH_LONG).show();
             for(Button btn : keyboardButtons){
                 btn.setEnabled(false);
             }
-        } else if (game.isGameWon()){
+        } else if (gameMechanics.isGameWon()){
             Toast.makeText(this, R.string.Win, Toast.LENGTH_LONG).show();
             updateScoreboard();
             for(Button btn : keyboardButtons){
@@ -429,22 +430,22 @@ public class GameActivity extends Activity {
 
     private void updateWordAndCategoryView(String[] wordArray){
         wordText.setText(Helper.stringArrayToString(wordArray));
-        categoryView.setText(game.getCategory());
+        categoryView.setText(gameMechanics.getCategory());
     }
 
     private void updateWordAndCategoryView(String word){
         wordText.setText(word);
-        categoryView.setText(game.getCategory());
+        categoryView.setText(gameMechanics.getCategory());
     }
 
     private void updateScoreboard(){
-        GameStatus status = game.getStatus();
+        GameStatus status = gameMechanics.getStatus();
         pointsView.setText(status.getPoints());
         streakView.setText(status.getStreak());
         maxPointsView.setText(status.getMaxPoints());
     }
 
-    public void showDialogOkCancel(String title, CharSequence message, final Callable<Void> positiveFunc, final Callable<Void> negativeFunc) {
+    private void showDialogOkCancel(String title, CharSequence message, final Callable<Void> positiveFunc, final Callable<Void> negativeFunc) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         if (title != null)
             builder.setTitle(title);
@@ -474,11 +475,43 @@ public class GameActivity extends Activity {
         builder.show();
     }
 
+    private void saveGame(){
+        Game game = new Game();
+        GameStatus status = gameMechanics.getStatus();
+        Word word = status.getWord();
+        String guess = Helper.stringArrayToString(word.guess);
+        String result = word.word;
+        String category = word.category;
+        String opponent = status.getOpponent();
+        long score = Long.valueOf(status.getPoints());
+        long attemptsUsed = status.getAttemptsUsed();
+        long streak = Long.valueOf(status.getStreak());
+        long highestScore = Long.valueOf(status.getMaxPoints());
+        game.setId(status.getId());
+
+        game.setGame(opponent, highestScore, score, streak, attemptsUsed, result, guess, category);
+
+        datasource.updateGame(game);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        datasource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        saveGame();
+        datasource.close();
+        super.onPause();
     }
 
     class ImageBackgroundTask extends AsyncTask<Integer, Void, Bitmap> {

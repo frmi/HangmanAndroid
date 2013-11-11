@@ -6,8 +6,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center">
+        android:layout_height="wrap_content">
 
         <FrameLayout
             android:layout_width="fill_parent"
@@ -88,6 +87,31 @@
                     android:id="@+id/playButton"
                     android:layout_gravity="center_horizontal" />
             </LinearLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/frameLayout">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Continue a game?"
+                android:id="@+id/textView4"
+                android:gravity="center_vertical|center_horizontal" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <ListView
+                android:id="@+id/gamesList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         </FrameLayout>
 

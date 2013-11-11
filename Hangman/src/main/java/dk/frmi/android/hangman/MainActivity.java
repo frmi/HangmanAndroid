@@ -7,9 +7,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 
+import java.util.List;
 import java.util.Locale;
+
+import dk.frmi.android.hangman.DB.Game;
+import dk.frmi.android.hangman.DB.GamesDataSource;
 
 /**
  * Created by fm on 11/9/13.
@@ -17,10 +22,35 @@ import java.util.Locale;
 public class MainActivity extends Activity {
     private Spinner difficultiesSpinner = null;
     private Spinner languageSpinner = null;
+    private GamesDataSource datasource;
+    private ListView gamesList;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Start connection to DB
+        datasource = new GamesDataSource(this);
+        datasource.open();
+
+        // Load all saved games
+        List<Game> values = datasource.getAllGames();
+        gamesList = (ListView) findViewById(R.id.gamesList);
+
+        // use the SimpleCursorAdapter to show the
+        // elements in a ListView
+        ArrayAdapter<Game> adapter = new ArrayAdapter<Game>(this,
+                android.R.layout.simple_list_item_1, values);
+        gamesList.setAdapter(adapter);
+
+        // set OnClickListener
+        /*gamesList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Game game = (Game) gamesList.getSelectedItem();
+
+            }
+        });*/
 
         difficultiesSpinner = (Spinner) findViewById(R.id.difficultySpinner);
         languageSpinner = (Spinner) findViewById(R.id.languageSpinner);

@@ -23,7 +23,7 @@
     <string name="categoryLbl">Kategori:</string>
     <string name="CategoryNotFound">Kategori blev ikke fundet</string>
     <string name="MaxPoints">Rekord</string>
-    <string name="PlayBtn">Start spil</string>
+    <string name="PlayBtn">Start nyt spil</string>
     <string name="Language">Sprog:</string>
     <string name="Difficulty">Sværhedsgrad:</string>
     <string name="Warning">Advarsel</string>
