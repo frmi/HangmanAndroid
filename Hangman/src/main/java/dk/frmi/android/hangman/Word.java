@@ -17,6 +17,13 @@ public class Word {
         guess = convertWordToUnderscores();
     }
 
+    public Word(String word, String category, String guess){
+        this.word = word;
+        this.category = category;
+        facit = Helper.stringToArray(this.word);
+        this.guess = Helper.stringToArray(guess);
+    }
+
     private String[] convertWordToUnderscores(){
         int length = facit.length;
         String[] result = new String[length];

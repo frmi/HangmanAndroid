@@ -7,32 +7,38 @@ import android.util.Log;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
-    public static final String TABLE_GAMES = "games";
-    public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_HIGHEST = "highest";
-    public static final String COLUMN_STREAK = "streak";
-    public static final String COLUMN_SCORE = "score";
-    public static final String COLUMN_OPPONENT = "opponent";
-    public static final String COLUMN_ATTEMPTS = "attempts";
-    public static final String COLUMN_RESULT = "result";
-    public static final String COLUMN_GUESS = "guess";
-    public static final String COLUMN_CATEGORY = "category";
+    public static final String TABLE_GAMES          = "games";
+    public static final String COLUMN_ID            = "_id";
+    public static final String COLUMN_HIGHEST       = "highest";
+    public static final String COLUMN_STREAK        = "streak";
+    public static final String COLUMN_SCORE         = "score";
+    public static final String COLUMN_OPPONENT      = "opponent";
+    public static final String COLUMN_ATTEMPTS      = "attempts";
+    public static final String COLUMN_LANGUAGE      = "language";
+    public static final String COLUMN_DIFFICULTY    = "difficulty";
+    public static final String COLUMN_RESULT        = "result";
+    public static final String COLUMN_GUESS         = "guess";
+    public static final String COLUMN_CATEGORY      = "category";
+    public static final String COLUMN_USEDCHARS      = "usedchars";
 
     private static final String DATABASE_NAME = "hangman.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
-    private static final String DATABASE_CREATE = "create table "
-            + TABLE_GAMES + "("
-            + COLUMN_ID         + " integer primary key autoincrement, "
-            + COLUMN_OPPONENT   + " text not null, "
-            + COLUMN_HIGHEST    + " integer not null, "
-            + COLUMN_SCORE      + " integer not null, "
-            + COLUMN_STREAK     + " integer not null, "
-            + COLUMN_ATTEMPTS   + " integer not null, "
-            + COLUMN_RESULT     + " text not null, "
-            + COLUMN_GUESS      + " text not null, "
-            + COLUMN_CATEGORY   + " text not null);";
+    private static final String DATABASE_CREATE = "CREATE TABLE "
+            + TABLE_GAMES         + "("
+            + COLUMN_ID           + " integer primary key autoincrement, "
+            + COLUMN_OPPONENT     + " text not null, "
+            + COLUMN_HIGHEST      + " integer not null, "
+            + COLUMN_SCORE        + " integer not null, "
+            + COLUMN_STREAK       + " integer not null, "
+            + COLUMN_ATTEMPTS     + " integer not null, "
+            + COLUMN_LANGUAGE     + " integer not null, "
+            + COLUMN_DIFFICULTY   + " integer not null, "
+            + COLUMN_RESULT       + " text not null, "
+            + COLUMN_GUESS        + " text not null, "
+            + COLUMN_CATEGORY     + " text not null, "
+            + COLUMN_USEDCHARS     + " text not null);";
 
     public MySQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

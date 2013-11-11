@@ -22,6 +22,8 @@
     <string name="Warning">Warning</string>
     <string name="WarningMessage">This will reset your streak and you will lose score for this word.\nDo you want to proceed?</string>
     <string name="WelcomeMessage">Ready for a game of Hangman?</string>
+    <string name="ContinueAGame">Continue a game?</string>
+    <string name="AttemptsLeft">Attempts</string>
 
     <string-array name="difficulties_array">
         <item>Easy</item>

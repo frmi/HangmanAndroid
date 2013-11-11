@@ -3,30 +3,33 @@ package dk.frmi.android.hangman;
 /**
  * Created by Frederik on 04-11-13.
  */
-public class GameStatus {
+public class GameInfo {
     private final int MAX_ATTEMPS = 5;
 
     private int id;
-    private int maxPoints;
-    private int points;
-    private int streak;
+    private long maxScore;
+    private long points;
+    private long streak;
     private int attemptsUsed;
     private boolean isAllAttempsUsed = false;
     private boolean isWon = false;
     private boolean isLost = false;
     private String opponent = "NONE";
+    private String usedChars = "";
     private Word word;
 
-    public GameStatus(){
+    public GameInfo(){
         points = 0;
         streak = 0;
         attemptsUsed = 0;
     }
 
-    public GameStatus(int points, int streak, int attemptsUsed, Word word){
+    public GameInfo(long points, long streak, int attemptsUsed, long maxScore, Word word){
         this.points = points;
         this.streak = streak;
         this.attemptsUsed = attemptsUsed;
+        this.maxScore = maxScore;
+        this.word = word;
     }
 
     public boolean isGameOver(){
@@ -43,10 +46,16 @@ public class GameStatus {
         isAllAttempsUsed = false;
         isWon = false;
         isLost = false;
+        usedChars = "";
         return shouldSubtractPoints;
     }
 
-    public void incAttempts(){
+    public void wrongGuess(String ch){
+        incAttempts();
+        usedChars += ch;
+    }
+
+    private void incAttempts(){
         attemptsUsed++;
         if (attemptsUsed >= MAX_ATTEMPS){
             isAllAttempsUsed = true;
@@ -89,11 +98,11 @@ public class GameStatus {
         return isLost;
     }
 
-    public String getMaxPoints(){
-        if (points > maxPoints){
-            maxPoints = points;
+    public String getMaxScore(){
+        if (points > maxScore){
+            maxScore = points;
         }
-        return String.valueOf(maxPoints);
+        return String.valueOf(maxScore);
     }
 
     public String getPoints(){
@@ -127,5 +136,9 @@ public class GameStatus {
 
     public void setOpponent(String opponent) {
         this.opponent = opponent;
+    }
+
+    public String getUsedChars(){
+        return usedChars;
     }
 }

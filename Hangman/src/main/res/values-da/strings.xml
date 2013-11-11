@@ -29,6 +29,8 @@
     <string name="Warning">Advarsel</string>
     <string name="WarningMessage">Dette vil nulstille din streak og du vil tabe point for dette ord.\nVil fortsætte?</string>
     <string name="WelcomeMessage">Klar til et spil Hangman?</string>
+    <string name="ContinueAGame">Fortsæt et spil?</string>
+    <string name="AttemptsLeft">Forsøg</string>
 
     <string-array name="difficulties_array">
         <item>Let</item>

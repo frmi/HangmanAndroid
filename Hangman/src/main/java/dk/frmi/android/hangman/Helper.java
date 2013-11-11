@@ -1,5 +1,6 @@
 package dk.frmi.android.hangman;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -22,6 +23,27 @@ import java.util.List;
  * Created by Frederik on 01-11-13.
  */
 public class Helper {
+    private Context context;
+    private static Helper instance;
+
+    private Helper(){
+
+    }
+
+    public static synchronized Helper getInstance() {
+        if (instance == null) {
+            instance = new Helper();
+        }
+        return instance;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public Context getContext(){
+        return context;
+    }
 
     public static String stringArrayToString(String[] array){
         String str = "";

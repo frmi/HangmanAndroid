@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -24,17 +25,25 @@ public class MainActivity extends Activity {
     private Spinner languageSpinner = null;
     private GamesDataSource datasource;
     private ListView gamesList;
+    private List<Game> values;
+    private Helper helper;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // init helper class
+        helper = Helper.getInstance();
+        helper.setContext(this);
+
         // Start connection to DB
         datasource = new GamesDataSource(this);
         datasource.open();
 
+        //datasource.createGame("SINGLE PLAYER", 1000, 250, 3, 0, 1, 0, "Hangman", "_angman", "Database");
+
         // Load all saved games
-        List<Game> values = datasource.getAllGames();
+        values = datasource.getAllGames();
         gamesList = (ListView) findViewById(R.id.gamesList);
 
         // use the SimpleCursorAdapter to show the
@@ -42,15 +51,25 @@ public class MainActivity extends Activity {
         ArrayAdapter<Game> adapter = new ArrayAdapter<Game>(this,
                 android.R.layout.simple_list_item_1, values);
         gamesList.setAdapter(adapter);
-
-        // set OnClickListener
-        /*gamesList.setOnClickListener(new View.OnClickListener() {
+        gamesList.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                Game game = (Game) gamesList.getSelectedItem();
-
+            public boolean onLongClick(View v) {
+                return false;
             }
-        });*/
+        });
+
+        gamesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long index) {
+                Intent gameIntent = new Intent(view.getContext(), GameActivity.class);
+                String gameId = "GAME";
+
+                long id = values.get((int) index).getId();
+
+                gameIntent.putExtra(gameId, id);
+                view.getContext().startActivity(gameIntent);
+            }
+        });
 
         difficultiesSpinner = (Spinner) findViewById(R.id.difficultySpinner);
         languageSpinner = (Spinner) findViewById(R.id.languageSpinner);
@@ -69,9 +88,11 @@ public class MainActivity extends Activity {
                 Intent gameIntent = new Intent(v.getContext(), GameActivity.class);
                 String difficultyId = "DIFFICULTY";
                 String languageId = "LANGUAGE";
+                String newGameId = "NEWGAME";
 
                 gameIntent.putExtra(languageId, languageSpinner.getSelectedItemPosition());
                 gameIntent.putExtra(difficultyId, difficultiesSpinner.getSelectedItemPosition());
+                gameIntent.putExtra(newGameId, true);
                 v.getContext().startActivity(gameIntent);
             }
         });
@@ -86,6 +107,16 @@ public class MainActivity extends Activity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onResume() {
+        datasource.open();
+        values = datasource.getAllGames();
+        ArrayAdapter<Game> adapter = new ArrayAdapter<Game>(this,
+                android.R.layout.simple_list_item_1, values);
+        gamesList.setAdapter(adapter);
+        super.onResume();
     }
 
 }

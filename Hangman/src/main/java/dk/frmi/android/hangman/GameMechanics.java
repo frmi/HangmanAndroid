@@ -10,52 +10,66 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import dk.frmi.android.hangman.DB.Game;
+
 /**
  * Created by Frederik on 01-11-13.
  */
 public class GameMechanics {
-    private GameStatus _gameStatus;
+    private GameInfo _gameInfo;
     private ArrayList<Word> _dictionary;
     private Context _context;
     private int _difficulty;
+    private int _language;
 
     public GameMechanics(Context context, int language, int difficulty){
         /* Initialize variables */
         _context = context;
-        _gameStatus = new GameStatus();
+        _gameInfo = new GameInfo();
         _difficulty = difficulty;
-        InputStream inputStream = resolveLanguage(language);
+        _language = language;
+        InputStream inputStream = resolveLanguage(_language);
         _dictionary = createDictionary(inputStream);
-        _gameStatus.setWord(getWord());
+        _gameInfo.setWord(getWord());
+    }
+
+    public GameMechanics(Context context, Game game){
+        _context = context;
+        Word word = new Word(game.getResult(), game.getCategory(), game.getGuess());
+        _gameInfo = new GameInfo(game.getScore(), game.getStreak(), game.getAttemptsUsed(), game.getHighestScore(), word);
+        _difficulty = game.getDifficulty();
+        _language = game.getLanguage();
+        InputStream inputStream = resolveLanguage(_language);
+        _dictionary = createDictionary(inputStream);
     }
 
     public String[] getGuessArray(){
-        if (_gameStatus.getWord().guess == null || _gameStatus.isGameOver()){
+        if (_gameInfo.getWord().guess == null || _gameInfo.isGameOver()){
             newWord();
         }
-        return _gameStatus.getWord().guess;
+        return _gameInfo.getWord().guess;
     }
 
     public String[] getResultArray(){
-        if (_gameStatus.getWord().facit == null){
+        if (_gameInfo.getWord().facit == null){
             newWord();
         }
-        return _gameStatus.getWord().facit;
+        return _gameInfo.getWord().facit;
     }
 
     public String getCategory(){
-        if (_gameStatus.getWord().category == null){
+        if (_gameInfo.getWord().category == null){
             newWord();
         }
-        return _gameStatus.getWord().category;
+        return _gameInfo.getWord().category;
     }
 
     public void newWord(){
-        boolean shouldSubtractPoints = _gameStatus.newRound();
+        boolean shouldSubtractPoints = _gameInfo.newRound();
         if (shouldSubtractPoints){
-            _gameStatus.subPoints(_gameStatus.getWord().facit);
+            _gameInfo.subPoints(_gameInfo.getWord().facit);
         }
-        _gameStatus.setWord(getWord());
+        _gameInfo.setWord(getWord());
     }
 
     private InputStream resolveLanguage(int languageId){
@@ -133,7 +147,7 @@ public class GameMechanics {
 
     public List<Integer> findIndexOfChar(String ch){
         List<Integer> result = new ArrayList<Integer>();
-        String[] facit = _gameStatus.getWord().facit;
+        String[] facit = _gameInfo.getWord().facit;
         for (int i = 0; i < facit.length; i++){
             if (facit[i].toLowerCase().equals(ch.toLowerCase())){
                 result.add(i);
@@ -141,7 +155,7 @@ public class GameMechanics {
         }
 
         if (result.size() == 0){
-            _gameStatus.incAttempts();
+            _gameInfo.wrongGuess(ch);
         }
 
         return result;
@@ -149,7 +163,7 @@ public class GameMechanics {
 
     public int getImage(){
         int result = 0;
-        switch (_gameStatus.getAttemptsUsed()){
+        switch (_gameInfo.getAttemptsUsed()){
             case 0:
                 result = R.drawable.hangman1;
                 break;
@@ -172,33 +186,33 @@ public class GameMechanics {
         return result;
     }
 
-    public GameStatus getStatus(){
-        return _gameStatus;
+    public GameInfo getStatus(){
+        return _gameInfo;
     }
 
     public boolean isGameWon(){
         boolean result = true;
 
-        String[] facit = _gameStatus.getWord().facit;
+        String[] facit = _gameInfo.getWord().facit;
         for (int i = 0; i < facit.length; i++){
-            if (facit[i].equals(_gameStatus.getWord().guess[i]) == false){
+            if (facit[i].equals(_gameInfo.getWord().guess[i]) == false){
                 result = false;
                 break;
             }
         }
 
         if (result == true){
-            _gameStatus.setWon(true);
-            _gameStatus.addPoints(facit);
+            _gameInfo.setWon(true);
+            _gameInfo.addPoints(facit);
         }
 
         return result;
     }
 
     public boolean isGameOver(){
-        if (_gameStatus.isAllAttempsUsed()){
-            _gameStatus.setLost(true);
-            _gameStatus.subPoints(_gameStatus.getWord().facit);
+        if (_gameInfo.isAllAttempsUsed()){
+            _gameInfo.setLost(true);
+            _gameInfo.subPoints(_gameInfo.getWord().facit);
             return true;
         } else {
             return false;
@@ -216,4 +230,11 @@ public class GameMechanics {
         return word;
     }
 
+    public int getDifficulty() {
+        return _difficulty;
+    }
+
+    public int getLanguage() {
+        return _language;
+    }
 }
